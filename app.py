@@ -24,7 +24,7 @@ class ReelRequest(BaseModel):
 
 @app.get("/")
 def home():
-    return {"status":"ViralReel AI running 🚀"}
+    return {"status": "ViralReel AI running 🚀"}
 
 # 🎣 HOOK GENERATOR
 @app.post("/generate-hook")
@@ -44,10 +44,7 @@ Rules:
 
     response = client.chat.completions.create(
         model="llama-3.1-8b-instant",
-        messages=[{
-            "role":"system",
-            "content":prompt
-        }],
+        messages=[{"role": "system", "content": prompt}],
         max_tokens=400
     )
 
@@ -77,10 +74,7 @@ Style:
 
     response = client.chat.completions.create(
         model="llama-3.1-8b-instant",
-        messages=[{
-            "role":"system",
-            "content":prompt
-        }],
+        messages=[{"role": "system", "content": prompt}],
         max_tokens=700
     )
 
@@ -105,10 +99,7 @@ Rules:
 
     response = client.chat.completions.create(
         model="llama-3.1-8b-instant",
-        messages=[{
-            "role":"system",
-            "content":prompt
-        }],
+        messages=[{"role": "system", "content": prompt}],
         max_tokens=300
     )
 
@@ -130,14 +121,16 @@ Give only hashtags.
 
     response = client.chat.completions.create(
         model="llama-3.1-8b-instant",
-        messages=[{
-            "role":"system",
-            "content":prompt
-        }],
+        messages=[{"role": "system", "content": prompt}],
         max_tokens=200
     )
 
-    @app.post("/generate-all")
+    return {
+        "hashtags": response.choices[0].message.content
+    }
+
+# 🚀 GENERATE ALL (FIXED + PROPER PLACEMENT)
+@app.post("/generate-all")
 def generate_all(data: ReelRequest):
 
     prompt = f"""
@@ -169,17 +162,10 @@ Rules:
 
     response = client.chat.completions.create(
         model="llama-3.1-8b-instant",
-        messages=[{
-            "role":"system",
-            "content":prompt
-        }],
+        messages=[{"role": "system", "content": prompt}],
         max_tokens=1200
     )
 
     return {
         "result": response.choices[0].message.content
-    }
-
-    return {
-        "hashtags": response.choices[0].message.content
     }
