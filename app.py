@@ -137,6 +137,49 @@ Give only hashtags.
         max_tokens=200
     )
 
+    @app.post("/generate-all")
+def generate_all(data: ReelRequest):
+
+    prompt = f"""
+You are a viral Instagram content expert.
+
+Generate full reel package for:
+
+Topic: {data.topic}
+
+Output format:
+
+🎣 Hooks:
+(5 viral hooks)
+
+🎬 Script:
+(short reel script with hook, body, CTA)
+
+✍ Caption:
+(viral caption)
+
+🔥 Hashtags:
+(only hashtags)
+
+Rules:
+- Gen Z style
+- emotional + viral + engaging
+- short and scroll-stopping
+"""
+
+    response = client.chat.completions.create(
+        model="llama-3.1-8b-instant",
+        messages=[{
+            "role":"system",
+            "content":prompt
+        }],
+        max_tokens=1200
+    )
+
+    return {
+        "result": response.choices[0].message.content
+    }
+
     return {
         "hashtags": response.choices[0].message.content
     }
